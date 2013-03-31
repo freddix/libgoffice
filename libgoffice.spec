@@ -2,14 +2,12 @@
 
 Summary:	Glib/Gtk+ set of document centric objects and utilities
 Name:		libgoffice
-Version:	0.8.17
+Version:	0.10.1
 Release:	1
 License:	GPL v2
 Group:		Libraries
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/goffice/0.8/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	b4c924457163e02daf8a8d2428f51d10
-Source1:	go-conf-gsettings.c
-Patch0:		%{name}-drop-pcre.patch
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/goffice/0.10/%{orgname}-%{version}.tar.xz
+# Source0-md5:	90fd17c6fe205b779571e00d9b0b4727
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gtk+-devel
@@ -42,9 +40,6 @@ libgoffice API documentation.
 
 %prep
 %setup -qn %{orgname}-%{version}
-%patch0 -p1
-
-install %{SOURCE1} goffice/app
 
 %build
 %{__gtkdocize}
@@ -59,12 +54,13 @@ install %{SOURCE1} goffice/app
 	--disable-silent-rules		\
 	--disable-static		\
 	--with-html-dir=%{_gtkdocdir}
-%{__make}
+%{__make} \
+	DATADIRNAME=%{_datadir}	\
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
+%{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/goffice/%{version}/plugins/*/*.la
